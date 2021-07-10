@@ -16,10 +16,11 @@ import java.sql.ResultSetMetaData;
 public class BeanHandler<T> implements Handler {
 
 	//定义封装到那个实体的字节码
-	private Class<T> tClass;
+	private final Class<T> tClass;
 
 	/**
 	 * 创建BeanHandler对象的时候，需要提供封装到的实体类的类字节码
+	 *
 	 * @param tClass 字节码对象
 	 */
 	public BeanHandler(Class<T> tClass) {
@@ -28,6 +29,7 @@ public class BeanHandler<T> implements Handler {
 
 	/**
 	 * 处理结果集的具体实现
+	 *
 	 * @param resultSet 需要处理的结果集
 	 * @return
 	 */
@@ -51,7 +53,7 @@ public class BeanHandler<T> implements Handler {
 					//获取对应列的数据内容
 					Object object = resultSet.getObject(columnName);
 					//返回值对象的属性填充，借助java的内省机制，使用属性填充器填充属性
-					PropertyDescriptor propertyDescriptor = new PropertyDescriptor(columnName,tClass);
+					PropertyDescriptor propertyDescriptor = new PropertyDescriptor(columnName, tClass);
 					Method method = propertyDescriptor.getWriteMethod();
 					method.invoke(bean, object);
 				}

@@ -19,10 +19,6 @@ public class JDBCTemplate {
 
 	private DataSource dataSource;
 
-	public void setDataSource(DataSource dataSource) {
-		this.dataSource = dataSource;
-	}
-
 	public JDBCTemplate() {
 	}
 
@@ -30,13 +26,18 @@ public class JDBCTemplate {
 		setDataSource(dataSource);
 	}
 
+	public void setDataSource(DataSource dataSource) {
+		this.dataSource = dataSource;
+	}
+
 	/**
 	 * 执行增删改的操作
-	 * @param sql		sql语句
-	 * @param objects	参数
-	 * @return			数据库操作成功的条数
+	 *
+	 * @param sql     sql语句
+	 * @param objects 参数
+	 * @return 数据库操作成功的条数
 	 */
-	public int update(String sql,Object...objects) {
+	public int update(String sql, Object... objects) {
 		//验证数据源
 		if (dataSource == null) {
 			throw new NullPointerException("dataSource should not be null");
@@ -54,24 +55,24 @@ public class JDBCTemplate {
 			//获取sql中参数的个数
 			int parameterCount = metaData.getParameterCount();
 			//判断sql语句中是否有参数
-			if (parameterCount>0) {
+			if (parameterCount > 0) {
 				if (objects == null) {
 					throw new IllegalArgumentException("params should not be null");
 				}
 				//判断个数是否匹配
-				if (parameterCount!= objects.length) {
+				if (parameterCount != objects.length) {
 					throw new IllegalArgumentException("Incorrect parameter size: expected: " + parameterCount + ", but found " + objects.length);
 				}
 				//参数校验通过，给占位符赋值
 				for (int i = 0; i < parameterCount; i++) {
-					preparedStatement.setObject(i+1,objects[i]);
+					preparedStatement.setObject(i + 1, objects[i]);
 				}
 			}
 			//执行sql语句
 			return preparedStatement.executeUpdate();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
-		}finally {
+		} finally {
 			if (preparedStatement != null) {
 				try {
 					preparedStatement.close();
@@ -86,18 +87,19 @@ public class JDBCTemplate {
 					throwables.printStackTrace();
 				}
 			}
-			
+
 		}
-	} 
-	
+	}
+
 	/**
 	 * 执行查询操作
-	 * @param sql		sql语句
-	 * @ResultSetHandler handler  处理结果集的很封装，此处只是提供一个接口，由使用者编写具体的实现                     
-	 * @param objects	参数
-	 * @return			数据库操作成功的条数
+	 *
+	 * @param sql     sql语句
+	 * @param objects 参数
+	 * @ResultSetHandler handler  处理结果集的很封装，此处只是提供一个接口，由使用者编写具体的实现
+	 * @return 数据库操作成功的条数
 	 */
-	public Object query(String sql, Handler handler, Object...objects) {
+	public Object query(String sql, Handler handler, Object... objects) {
 		//验证数据源
 		if (dataSource == null) {
 			throw new NullPointerException("dataSource should not be null");
@@ -116,17 +118,17 @@ public class JDBCTemplate {
 			//获取sql中参数的个数
 			int parameterCount = metaData.getParameterCount();
 			//判断sql语句中是否有参数
-			if (parameterCount>0) {
+			if (parameterCount > 0) {
 				if (objects == null) {
 					throw new IllegalArgumentException("params should not be null");
 				}
 				//判断个数是否匹配
-				if (parameterCount!= objects.length) {
+				if (parameterCount != objects.length) {
 					throw new IllegalArgumentException("Incorrect parameter size: expected: " + parameterCount + ", but found " + objects.length);
 				}
 				//参数校验通过，给占位符赋值
 				for (int i = 0; i < parameterCount; i++) {
-					preparedStatement.setObject(i+1,objects[i]);
+					preparedStatement.setObject(i + 1, objects[i]);
 				}
 			}
 			//执行sql语句
@@ -134,7 +136,7 @@ public class JDBCTemplate {
 			return handler.handlerResultSet(resultSet);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
-		}finally {
+		} finally {
 			if (preparedStatement != null) {
 				try {
 					preparedStatement.close();
@@ -149,9 +151,9 @@ public class JDBCTemplate {
 					throwables.printStackTrace();
 				}
 			}
-			
+
 		}
 	}
-	
-	
+
+
 }

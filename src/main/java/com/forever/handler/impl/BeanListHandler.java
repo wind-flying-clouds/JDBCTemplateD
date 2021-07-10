@@ -17,7 +17,7 @@ import java.util.List;
 
 public class BeanListHandler<T> implements Handler {
 
-	private Class<T> tClass;
+	private final Class<T> tClass;
 
 	public BeanListHandler(Class<T> tClass) {
 		this.tClass = tClass;
